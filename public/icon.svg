@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+	<!-- Background -->
+	<rect width="512" height="512" rx="96" fill="#09090b" />
+	<!-- TV body -->
+	<rect
+		x="96"
+		y="136"
+		width="320"
+		height="210"
+		rx="18"
+		fill="none"
+		stroke="#ffffff"
+		stroke-width="22"
+	/>
+	<!-- TV stand neck -->
+	<rect x="236" y="346" width="40" height="52" rx="6" fill="#ffffff" />
+	<!-- TV stand base -->
+	<rect x="168" y="392" width="176" height="28" rx="14" fill="#ffffff" />
+	<!-- Antenna left -->
+	<line
+		x1="210"
+		y1="136"
+		x2="168"
+		y2="72"
+		stroke="#ffffff"
+		stroke-width="18"
+		stroke-linecap="round"
+	/>
+	<!-- Antenna right -->
+	<line
+		x1="302"
+		y1="136"
+		x2="344"
+		y2="72"
+		stroke="#ffffff"
+		stroke-width="18"
+		stroke-linecap="round"
+	/>
+	<!-- Play triangle -->
+	<polygon points="214,192 214,290 326,241" fill="#ffffff" />
+</svg>
