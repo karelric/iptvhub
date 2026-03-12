@@ -7,8 +7,8 @@ import { useChannels, type Channel } from "@/hooks/useChannels";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useM3uUrls } from "@/hooks/useM3uUrls";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { PictureInPicture2, RefreshCw, Settings, Tv2, X } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { RefreshCw, Settings, Tv2, X } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type Filter = "all" | "favorites";
@@ -24,47 +24,6 @@ export function HomePage() {
 	const [selected, setSelected] = useState<Channel | null>(null);
 
 	const scrollRef = useRef<HTMLDivElement>(null);
-	const videoRef = useRef<HTMLVideoElement>(null);
-	const [pipSupported, setPipSupported] = useState(false);
-
-	type WebkitVideo = HTMLVideoElement & {
-		webkitSupportsPresentationMode?: (mode: string) => boolean;
-		webkitSetPresentationMode?: (mode: string) => void;
-	};
-
-	// Detect PiP support (standard + webkit prefix for iOS 17+)
-	useEffect(() => {
-		const video = videoRef.current as WebkitVideo | null;
-		if (!video) return;
-		const standard = !!document.pictureInPictureEnabled;
-		const webkit =
-			typeof video.webkitSupportsPresentationMode === "function" &&
-			video.webkitSupportsPresentationMode("picture-in-picture");
-		setPipSupported(standard || webkit);
-	}, [selected]);
-
-	const enterPiP = async () => {
-		const video = videoRef.current as WebkitVideo | null;
-		if (!video) return;
-		try {
-			if (document.pictureInPictureEnabled) {
-				await (video as HTMLVideoElement).requestPictureInPicture();
-			} else {
-				video.webkitSetPresentationMode?.("picture-in-picture");
-			}
-		} catch {
-			// ignore — user or browser denied
-		}
-	};
-
-	// iOS Safari exits fullscreen and pauses the video — resume automatically
-	useEffect(() => {
-		const video = videoRef.current;
-		if (!video) return;
-		const resume = () => video.play().catch(() => {});
-		video.addEventListener("webkitendfullscreen", resume);
-		return () => video.removeEventListener("webkitendfullscreen", resume);
-	}, [selected]);
 
 	const filtered = useMemo(() => {
 		let list = channels;
@@ -241,39 +200,16 @@ export function HomePage() {
 				</aside>
 
 				{/* Player */}
-				<main className="order-1 md:order-2 relative flex flex-col items-center justify-center bg-zinc-950 w-full aspect-video md:aspect-auto md:flex-1 md:min-w-0">
+				<main className="order-1 md:order-2 flex flex-col items-center justify-center bg-zinc-950 w-full aspect-video md:aspect-auto md:flex-1 md:min-w-0">
 					{selected?.url ? (
-						<>
-							<video
-								ref={videoRef}
-								key={selected.url}
-								src={selected.url}
-								controls
-								autoPlay
-								playsInline
-								className="w-full h-full object-contain"
-							/>
-							{pipSupported && (
-								<Tooltip>
-									<TooltipTrigger
-										render={
-											<Button
-												variant="ghost"
-												size="icon"
-												className="absolute top-2 right-2 text-white/60 hover:text-white hover:bg-white/10"
-												onClick={enterPiP}
-												aria-label="Picture in Picture"
-											/>
-										}
-									>
-										<PictureInPicture2 className="w-4 h-4" />
-									</TooltipTrigger>
-									<TooltipContent side="bottom">
-										Picture in Picture
-									</TooltipContent>
-								</Tooltip>
-							)}
-						</>
+						<video
+							key={selected.url}
+							src={selected.url}
+							controls
+							autoPlay
+							playsInline
+							className="w-full h-full object-contain"
+						/>
 					) : (
 						<div className="flex flex-col items-center gap-3 text-white/30">
 							<Tv2 className="w-16 h-16" />
