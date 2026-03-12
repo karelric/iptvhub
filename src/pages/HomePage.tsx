@@ -207,6 +207,7 @@ export function HomePage() {
 							src={selected.url}
 							controls
 							autoPlay
+							playsInline
 							className="w-full h-full object-contain"
 						/>
 					) : (
