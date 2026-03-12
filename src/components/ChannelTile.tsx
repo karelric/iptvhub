@@ -63,7 +63,7 @@ export function ChannelTile({
 				type="button"
 				aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
 				className={cn(
-					"shrink-0 p-1 rounded transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100",
+					"shrink-0 p-1 rounded transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100 [@media(hover:none)]:opacity-100",
 					isFavorite && "opacity-100",
 					isSelected ? "hover:bg-primary-foreground/20" : "hover:bg-muted-foreground/20",
 				)}
