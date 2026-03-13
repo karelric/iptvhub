@@ -1,6 +1,7 @@
 import { ChannelTile, ChannelTileSkeleton } from "@/components/ChannelTile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useChannels, type Channel } from "@/hooks/useChannels";
@@ -121,10 +122,7 @@ export function HomePage() {
 						</div>
 					)}
 
-					<div
-						ref={scrollRef}
-						className="flex-1 overflow-y-auto min-h-0 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent hover:scrollbar-thumb-white/20"
-					>
+					<ScrollArea viewportRef={scrollRef} className="flex-1 min-h-0">
 						{urls.length === 0 && (
 							<div className="flex flex-col items-center gap-3 px-4 py-8 text-center">
 								<p className="text-sm font-medium">No M3U playlists configured</p>
@@ -196,7 +194,7 @@ export function HomePage() {
 								})}
 							</div>
 						)}
-					</div>
+					</ScrollArea>
 				</aside>
 
 				{/* Player */}
