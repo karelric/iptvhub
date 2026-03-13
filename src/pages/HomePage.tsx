@@ -9,12 +9,14 @@ import { useFavorites } from "@/hooks/useFavorites";
 import { useM3uUrls } from "@/hooks/useM3uUrls";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { RefreshCw, Settings, Tv2, X } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type Filter = "all" | "favorites";
 
 export function HomePage() {
+	"use no memo";
+
 	const navigate = useNavigate();
 	const { urls, activeUrls } = useM3uUrls();
 	const { channels, isLoading, isFetching, isError, refetchAll } = useChannels(activeUrls);
@@ -45,11 +47,14 @@ export function HomePage() {
 		});
 	}, [channels, filter, search, favorites]);
 
+	const getScrollElement = useCallback(() => scrollRef.current, []);
+	const estimateSize = useCallback(() => 58, []);
+
 	const virtualizer = useVirtualizer({
 		count: filtered.length,
-		getScrollElement: () => scrollRef.current,
-		estimateSize: () => 58, // tile py-2 (8+8) + h-10 (40) + gap-0.5 (2)
-		overscan: 5,
+		getScrollElement,
+		estimateSize,
+		overscan: 8,
 		paddingStart: 8,
 		paddingEnd: 8,
 	});
@@ -163,6 +168,7 @@ export function HomePage() {
 									height: virtualizer.getTotalSize(),
 									width: "100%",
 									position: "relative",
+									willChange: "transform",
 								}}
 							>
 								{virtualizer.getVirtualItems().map((vItem) => {
